@@ -1,0 +1,186 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 19, 2020, 7:24:16 PM
+    Author     : Bashar
+*/
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+h1, h2, h3, h4 {
+  font-weight: bold;
+}
+.pt-60 {
+    padding-top: 60px;
+}
+.front {
+  /*padding-top: 60px;*/
+  background-color: #e6e6e6;
+}
+.front h1 {
+  font-size: 40px;
+  font-weight: bolder;
+  padding-top: 150px;
+}
+.front p {
+  font-size: 18px;
+  /* font-weight: bold; */
+}
+.front .regBtn {
+  border-radius: 50px;
+  box-shadow: 0px 0px 4px 1px rgba(0, 0, 0, 0.3);
+}
+
+.feature {
+  margin: 40px 0px 60px 0px;
+}
+
+.benefit {
+  background-color: #e6e6e6;
+  margin: 20px 0px;
+  padding: 20px 0px;
+}
+
+.price .package {
+  margin: 20px 0px;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 20px 0px;
+}
+.price .package .persms {
+  font-size: 20px;
+}
+.price .package .persms span {
+  font-size: 36px;
+  color: #2ecc42;
+}
+.price .package .persms .type {
+  color: #eb4e2b;
+}
+
+.testimonial {
+  background-color: #e6e6e6;
+  padding: 25px 0px;
+}
+
+.testimonial .carousel-control.right, .carousel-control.left {
+  background-image: none;
+  color: #2ecc42;
+}
+.testimonial .item h4 {
+  font-size: 19px;
+  line-height: 1.375em;
+  font-weight: 400;
+  font-style: italic;
+  margin: 70px 0;
+}
+
+footer {
+  background-color: #555;
+  color: white;
+  padding: 30px 0 0 0;
+  font-size: 16px;
+}
+footer img {
+  background-color: white;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  height: 60px;
+  width: 80px;
+}
+.payMethodBox {
+  width: 70px;
+  height: 50px;
+  padding: 4px;
+  margin: 2px;
+  background-color: #fff;
+  display: inline;
+  border: 1px solid #eee;
+  border-radius: 3px;
+}
+footer a {
+  color: #2ecc42;
+}
+footer .social {
+  height: 50px;
+  width: 50px;
+  font-size: 30px;
+  background: white;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 4px;
+}
+
+
+
+
+.sidebar {
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 20px 0px;
+  background-color: #f5f5f5;
+}
+.sidebar > ul > li {
+  list-style-type: none;
+  border-bottom: 1px solid gray;
+}
+.sidebar > ul > li:last-of-type {
+  border-bottom: none;
+}
+.sidebar > ul > li::before {
+  content: ">";
+  position: absolute;
+  right: 30px;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  background-color: #555;
+  color: white;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.sidebar button {
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 10px;
+}
+
+.subside {
+  margin-top: 12px;
+  display: none;
+}
+.subside li {
+  list-style-type: none;
+  border-top: 1px solid gray;
+  padding: 10px;
+  margin-left: 10px;
+}
+
+.mainArea {
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 20px;
+  font-size: 16px;
+  background-color: #f5f5f5;
+}
+.mainArea .title {
+  border-bottom: 1px solid gray;
+  margin-bottom: 20px;
+}
+
+
+.show {
+  display: block;
+}
