@@ -5,11 +5,15 @@
  */
 package me.abulbasar.bulksms.controller;
 
+import me.abulbasar.bulksms.model.Role;
 import me.abulbasar.bulksms.model.User;
 import me.abulbasar.bulksms.service.SecurityService;
 import me.abulbasar.bulksms.service.UserService;
 import me.abulbasar.bulksms.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -44,13 +48,20 @@ public class UserController {
             return "registration";
         }
         userService.save(userForm);
-        securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
+//        securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
 
-        return "redirect:/index";
+        return "redirect:/user";
     }
     
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
+//        User user = securityService.findLoggedUser();
+//        if(user != null) {
+//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//            for(GrantedAuthority authority : auth.getAuthorities()) {
+//                System.out.println(authority);
+//            }
+//        }
         if (error != null)
             model.addAttribute("error", "Your username and password is invalid.");
         if (logout != null)
@@ -59,17 +70,23 @@ public class UserController {
         return "login";
     }
     
-    @GetMapping({"/", "/index"})
-    public String index(Model model) {
-        User user = securityService.findLoggedUser();
-        if(user != null) {
-            model.addAttribute("email", user.getEmail());
-            System.out.println(user.getEmail());
-        }
-        else {
-            System.out.println(user);
-        }
+    @GetMapping("/")
+    public String index() {
+//        User user = securityService.findLoggedUser();
+//        if(user != null) 
+//            System.out.println(user.toString());
         return "index";
     }
     
+    @GetMapping("/user")
+    public String dashboard() {
+//        User user = securityService.findLoggedUser();
+//        if(user != null) {
+//            model.addAttribute("lastName", user.getLastName());
+//        }
+//        else {
+//            return "redirect:/";
+//        }
+        return "dashboard";
+    }
 }

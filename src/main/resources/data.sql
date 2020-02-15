@@ -8,4 +8,4 @@
  * Created: Jan 22, 2020
  */
 
-INSERT INTO `role` (`id`, `name`) VALUES (1, 'USER'),(2, 'ADMIN');
+-- INSERT INTO `role` (`id`, `name`) VALUES (1, 'USER'),(2, 'ADMIN');

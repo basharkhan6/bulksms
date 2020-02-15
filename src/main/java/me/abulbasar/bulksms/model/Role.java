@@ -19,8 +19,6 @@ import javax.persistence.ManyToMany;
  */
 @Entity
 public class Role implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -51,19 +49,5 @@ public class Role implements Serializable {
     public void setUsers(Set<User> users) {
         this.users = users;
     }
-
-    
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public String toString() {
-        return "Role{" + "id=" + id + ", name=" + name + ", users=" + users + '}';
-    }
-
     
 }

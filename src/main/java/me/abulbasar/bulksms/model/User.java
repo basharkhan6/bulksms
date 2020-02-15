@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,13 +26,12 @@ import javax.validation.constraints.NotEmpty;
  */
 @Entity
 public class User implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Email
     @NotEmpty
+    @Column(unique=true)
     private String email;
     private String password;
     @Transient
@@ -43,7 +43,7 @@ public class User implements Serializable {
     private String nid;
     private Date dob;
     private String imgUrl;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     
@@ -133,43 +133,6 @@ public class User implements Serializable {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
-    }
-    
-    
-
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final User other = (User) obj;
-        if (!Objects.equals(this.email, other.email)) {
-            return false;
-        }
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
-    }
-
-    
-
-    @Override
-    public String toString() {
-        return "User{" + "id=" + id + ", email=" + email + ", password=" + password + ", passwordConfirm=" + passwordConfirm + ", firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", nid=" + nid + ", dob=" + dob + ", imgUrl=" + imgUrl + ", roles=" + roles + '}';
     }
     
 }
