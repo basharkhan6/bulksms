@@ -7,7 +7,6 @@ package me.abulbasar.bulksms.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,10 +32,13 @@ public class User implements Serializable {
     @NotEmpty
     @Column(unique=true)
     private String email;
+    @NotEmpty
     private String password;
     @Transient
     private String passwordConfirm;
+    @NotEmpty
     private String firstName;
+    @NotEmpty
     private String lastName;
     @Column(columnDefinition = "TEXT")
     private String address;

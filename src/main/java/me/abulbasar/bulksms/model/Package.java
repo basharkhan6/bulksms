@@ -5,7 +5,6 @@
  */
 package me.abulbasar.bulksms.model;
 
-import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,7 +19,7 @@ import javax.validation.constraints.NotEmpty;
 public class Package {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @NotEmpty
     private String pName;
     private double price;
@@ -28,11 +27,11 @@ public class Package {
     private String type;
     private int duration;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

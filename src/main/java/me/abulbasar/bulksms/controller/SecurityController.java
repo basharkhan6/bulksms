@@ -5,31 +5,29 @@
  */
 package me.abulbasar.bulksms.controller;
 
-import me.abulbasar.bulksms.model.Role;
 import me.abulbasar.bulksms.model.User;
 import me.abulbasar.bulksms.service.SecurityService;
 import me.abulbasar.bulksms.service.UserService;
 import me.abulbasar.bulksms.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  *
  * @author Bashar
  */
 @Controller
-public class UserController {
-    
+public class SecurityController {
+
     @Autowired
-    private UserService userService;    
+    private UserService userService;
     @Autowired
     private SecurityService securityService;
     @Autowired
@@ -44,49 +42,62 @@ public class UserController {
     @PostMapping("/registration")
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
         userValidator.validate(userForm, bindingResult);
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "registration";
         }
         userService.save(userForm);
-//        securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
+        securityService.autoLogin(userForm.getEmail(), userForm.getPasswordConfirm());
 
         return "redirect:/user";
     }
-    
+
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
 //        User user = securityService.findLoggedUser();
-//        if(user != null) {
-//            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//            for(GrantedAuthority authority : auth.getAuthorities()) {
-//                System.out.println(authority);
-//            }
-//        }
-        if (error != null)
+//        System.out.println(securityService.matchRole("ADMIN"));
+        if(error != null) {
             model.addAttribute("error", "Your username and password is invalid.");
-        if (logout != null)
+        }
+        if(logout != null) {
             model.addAttribute("message", "You have been logged out successfully.");
+        }
 
         return "login";
     }
-    
+
     @GetMapping("/")
     public String index() {
-//        User user = securityService.findLoggedUser();
-//        if(user != null) 
-//            System.out.println(user.toString());
         return "index";
     }
+
+    @GetMapping("/home")
+    public String home() {
+        if(securityService.matchRole("ADMIN")) {
+            return "redirect:/admin";
+        }
+        else if(securityService.matchRole("USER")) {
+            return "redirect:/user";
+        }
+        else {
+            return "redirect:/";
+        }
+    }
     
-    @GetMapping("/user")
-    public String dashboard() {
-//        User user = securityService.findLoggedUser();
-//        if(user != null) {
-//            model.addAttribute("lastName", user.getLastName());
-//        }
-//        else {
-//            return "redirect:/";
-//        }
+    @GetMapping({"/user", "/admin"})
+    public String dashboard(Model model) {
+        model.addAttribute("urlRole", getUrlRole());
         return "dashboard";
+    }
+    
+    String getUrlRole() {
+        UriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequest();
+        String fullPath = builder.buildAndExpand().getPath();
+        String target = "/bulksms/";
+        String afterContext = fullPath.substring(target.length());
+        String role = afterContext;
+        if(afterContext.contains("/")) {
+            role = afterContext.substring(0, afterContext.indexOf("/"));
+        }
+        return role;
     }
 }

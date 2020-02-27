@@ -5,6 +5,7 @@
  */
 package me.abulbasar.bulksms.service;
 
+import me.abulbasar.bulksms.model.Role;
 import me.abulbasar.bulksms.model.User;
 import me.abulbasar.bulksms.repository.UserRepository;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -24,7 +26,7 @@ import org.springframework.stereotype.Service;
  * @author Bashar
  */
 @Service
-public class SecurityServiceImpl implements SecurityService{
+public class SecurityServiceImpl implements SecurityService {
     
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -45,15 +47,20 @@ public class SecurityServiceImpl implements SecurityService{
         return loggedUser;
     }
     
-    @Override
-    public String findLoggedInEmail() {
-        Object userDetails = SecurityContextHolder.getContext().getAuthentication().getDetails();
-        if(userDetails instanceof UserDetails) {
-            return ((UserDetails)userDetails).getUsername();
-        } 
-        return null;
-    }
-    
+    public boolean matchRole(String checkRole) {
+        User user = findLoggedUser();
+        if(user != null) {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            for(GrantedAuthority authority : auth.getAuthorities()) {
+                if(checkRole.equals(authority.toString())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        return false;
+    };
+        
     @Override
     public void autoLogin(String username, String password) {
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);

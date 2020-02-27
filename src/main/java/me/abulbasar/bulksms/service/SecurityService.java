@@ -13,7 +13,7 @@ import me.abulbasar.bulksms.model.User;
  */
 public interface SecurityService {
 
-    User findLoggedUser();    
-    String findLoggedInEmail();
+    User findLoggedUser();
+    boolean matchRole(String checkRole);
     void autoLogin(String username, String password);
 }

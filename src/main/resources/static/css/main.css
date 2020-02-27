@@ -123,50 +123,56 @@ footer .social {
 
 
 
+
 .sidebar {
   border: 1px solid gray;
   border-radius: 5px;
   padding: 20px 0px;
   background-color: #f5f5f5;
 }
-.sidebar > ul > li {
+.sidemenu li {
   list-style-type: none;
-  border-bottom: 1px solid gray;
 }
-.sidebar > ul > li:last-of-type {
-  border-bottom: none;
+.sidemenu li ul {
+  margin-bottom: 0px!important;
 }
-.sidebar > ul > li::before {
-  content: ">";
+.sidemenu > li > a, .menu > li > a {
+  width: 100%;
+  display: block;
+  padding: 8px;
+  color: inherit;
+  background-color: #ddd;
+  border-top: 2px solid #c00;
+  font-size: 16px;
+  font-weight: bold;
+  text-decoration: none;
+}
+.sidemenu > li > a:hover, .menu > li > a:hover {
+  border-left: 5px solid #c00;
+}
+.sidemenu > li:last-of-type {
+  border-bottom: 2px solid #c00;
+}
+.menu > li > a {
+  padding-left: 20px;
+  border-top: 1px solid gray;
+}
+.menu li.active a {
+  background-color: #fff;
+}
+.icn::after {
+  content: "";
   position: absolute;
   right: 30px;
-  height: 20px;
-  width: 20px;
-  text-align: center;
-  background-color: #555;
-  color: white;
-  border-radius: 50px;
-  cursor: pointer;
-  margin-top: 10px;
-}
-.sidebar button {
-  width: 100%;
-  background: none;
-  border: none;
-  text-align: left;
-  padding: 10px;
+  margin-top: -25px;
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  padding: 3px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
 }
 
-.subside {
-  margin-top: 12px;
-  display: none;
-}
-.subside li {
-  list-style-type: none;
-  border-top: 1px solid gray;
-  padding: 10px;
-  margin-left: 10px;
-}
+
 
 .mainArea {
   border: 1px solid gray;

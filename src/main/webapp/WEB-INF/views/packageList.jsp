@@ -1,6 +1,6 @@
 <%-- 
-    Document   : dashboard
-    Created on : Feb 9, 2020, 2:57:16 PM
+    Document   : package
+    Created on : Feb 9, 2020, 4:50:20 AM
     Author     : Bashar
 --%>
 
@@ -18,10 +18,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Dashboard | BulkSMS</title>
+        <title>Package | BulkSMS</title>
         <!-- styles -->
         <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/font-awesome/5.12.0/css/all.min.css" />
         <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/datatables/1.10.20/css/jquery.dataTables.min.css" />
         <!--main/custom css after bootstrap-->
         <link href="${contextPath}/css/main.css" rel="stylesheet" />
         <!-- style end -->
@@ -89,32 +90,67 @@
                                 <hr>
                             </div>
                             <div class="sidemenu">
-                                <li class="submenu"><a href="#">Package</a>
-                                    <ul class="menu">
-                                        <li><a href="${urlRole}/package/add">List All Package</a></li>
-                                        <li><a href="${urlRole}/package/add">Add New Package</a></li>
-                                    </ul>
-                                </li>
-                                <li class="submenu"><a href="#">Order</a>
-                                    <ul class="menu">
-                                        <li><a href="newOrder.html">Add New Order</a></li>
-                                        <li><a href="managePackage.html">Manage Order</a></li>
-                                    </ul>
-                                </li>
+                              <li class="submenu"><a href="#">Package</a>
+                                  <ul class="menu">
+                                      <li class="active"><a href="list">List All Package</a></li>
+                                    <li><a href="add">Add New Package</a></li>
+                                  </ul>
+                              </li>
+                              <li class="submenu"><a href="#">Order</a>
+                                  <ul class="menu">
+                                    <li><a href="newOrder.html">Add New Order</a></li>
+                                    <li><a href="managePackage.html">Manage Order</a></li>
+                                  </ul>
+                              </li>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-sm-9">
                         <div class="mainArea">
-                            <div class="title"><h1>Dashboard</h1></div>
-                            <p>Welcome, <strong>${lastName}</strong>(${urlRole}).
-                                <br>You can see <strong>Notice, Report, etc...</strong> here
-                                <br>Find more option from <strong>Sidebar</strong>.</p>
+                            <div class="title"><h1>List Package</h1></div>
+                            <c:if test="${sm != null}">
+                            <div class="alert alert-info alert-dismissible fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                ${sm}
+                              </div>
+                            </c:if>
+                            <div class="table-responsive">
+                                <table id="datatable" class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>pId</th>
+                                            <th>Name</th>
+                                            <th>Price</th>
+                                            <th>Sms</th>
+                                            <th>Duration</th>
+                                            <th>Type</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="pack" items="${packages}">
+                                            <tr>
+                                                <td>${pack.id}</td>
+                                                <td>${pack.pName}</td>
+                                                <td>${pack.price}</td>
+                                                <td>${pack.sms}</td>
+                                                <td>${pack.duration}</td>
+                                                <td>${pack.type}</td>
+
+                                                <td>                                                    
+                                                    <a href="update/${pack.id}" class="btn btn-sm btn-warning"> <i class="glyphicon glyphicon-pencil"></i></a>
+                                                    <a href="delete/${pack.id}" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
         </main>
 
         <footer>
@@ -161,9 +197,14 @@
         <script src="${contextPath}/webjars/jquery/3.4.1/jquery.min.js"></script>
         <!--bootstrap after jquery-->
         <script src="${contextPath}/webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        
+        <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/dataTables.bootstrap.min.js"></script>
+
         <script type="text/javascript">
           $(document).ready(function() {
+              $('#datatable').DataTable();
+              $('.dataTables_length').addClass('bs-select');
+
               $(".submenu").addClass("icn");
               $(".submenu .menu").hide();
               $(".sidemenu li.submenu").hover(function() {
