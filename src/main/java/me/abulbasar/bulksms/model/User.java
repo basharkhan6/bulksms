@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -43,8 +44,10 @@ public class User implements Serializable {
     @Column(columnDefinition = "TEXT")
     private String address;
     private String nid;
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private Date dob;
     private String imgUrl;
+    private boolean locked;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
@@ -127,6 +130,14 @@ public class User implements Serializable {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public boolean isLocked() {
+        return locked;
+    }
+
+    public void setLocked(boolean locked) {
+        this.locked = locked;
     }
 
     public Set<Role> getRoles() {

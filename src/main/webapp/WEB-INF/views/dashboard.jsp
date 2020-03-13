@@ -56,9 +56,6 @@
                                 <li><a href="#">Contact</a></li>
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
-                                <li>
-                                    <a href="${contextPath}/${urlRole}" class="btn">Dashboard </a> 
-                                </li>
                                 <!--in spring csrf logout implement on post with csrf token & header-->
                                 <li>
                                     <form action="${contextPath}/logout" method="post" class="navbar-form">
@@ -84,15 +81,15 @@
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
                                 <h4>${lastName}</h4>
-                                <a href="#" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
-                                <a href="#" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                                <a href="profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+                                <a href="profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
                             </div>
                             <div class="sidemenu">
                                 <li class="submenu"><a href="#">Package</a>
                                     <ul class="menu">
-                                        <li><a href="${urlRole}/package/add">List All Package</a></li>
-                                        <li><a href="${urlRole}/package/add">Add New Package</a></li>
+                                        <li><a href="${role}/package/list">List All Package</a></li>
+                                        <li><a href="${role}/package/add">Add New Package</a></li>
                                     </ul>
                                 </li>
                                 <li class="submenu"><a href="#">Order</a>
@@ -108,7 +105,19 @@
                     <div class="col-sm-9">
                         <div class="mainArea">
                             <div class="title"><h1>Dashboard</h1></div>
-                            <p>Welcome, <strong>${lastName}</strong>(${urlRole}).
+                            <c:if test="${sm != null}">
+                              <div class="alert alert-success alert-dismissible fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                ${sm}
+                              </div>
+                            </c:if>
+                            <c:if test="${em != null}">
+                              <div class="alert alert-danger alert-dismissible fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                ${em}
+                              </div>
+                            </c:if>
+                            <p>Welcome, <strong>${lastName}</strong>(${role}).
                                 <br>You can see <strong>Notice, Report, etc...</strong> here
                                 <br>Find more option from <strong>Sidebar</strong>.</p>
                         </div>
@@ -162,15 +171,7 @@
         <!--bootstrap after jquery-->
         <script src="${contextPath}/webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         
-        <script type="text/javascript">
-          $(document).ready(function() {
-              $(".submenu").addClass("icn");
-              $(".submenu .menu").hide();
-              $(".sidemenu li.submenu").hover(function() {
-                      $(this).children(".menu").toggle("slow");
-                      $(this).toggleClass("icn");
-              });
-          });
+        <script src="${contextPath}/js/loader.js"></script>
         </script>
         <!-- script end -->
     </body>

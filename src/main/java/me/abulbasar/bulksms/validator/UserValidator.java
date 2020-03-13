@@ -24,7 +24,7 @@ public class UserValidator implements Validator {
 
     @Autowired
     private UserService userService;
-        
+    
     @Override
     public boolean supports(Class<?> aClass) {
         return User.class.equals(aClass);
@@ -46,7 +46,7 @@ public class UserValidator implements Validator {
         if(userService.findByEmail(user.getEmail()) != null) {
             errors.rejectValue("email", "Duplicate.userForm.email");
         }
-
+        
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
         if (user.getPassword().length() < 6 || user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");

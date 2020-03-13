@@ -1,6 +1,6 @@
 <%-- 
-    Document   : packageUpdate
-    Created on : Feb 26, 2020, 3:37:18 AM
+    Document   : profileUpdate
+    Created on : Mar 1, 2020, 7:12:11 PM
     Author     : Bashar
 --%>
 
@@ -18,11 +18,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Package | BulkSMS</title>
+        <title>Profile | BulkSMS</title>
         <!-- styles -->
         <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/font-awesome/5.12.0/css/all.min.css" />
         <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/bootstrap/3.4.1/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/datatables/1.10.20/css/jquery.dataTables.min.css" />
+        <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
         <!--main/custom css after bootstrap-->
         <link href="${contextPath}/css/main.css" rel="stylesheet" />
         <!-- style end -->
@@ -85,21 +85,21 @@
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
                                 <h4>${lastName}</h4>
-                                <a href="../../../profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
-                                <a href="../../../profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
+                                <a href="${contextPath}/profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+                                <a href="${contextPath}/profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
                             </div>
                             <div class="sidemenu">
                                 <li class="submenu"><a href="#">Package</a>
                                     <ul class="menu">
-                                        <li><a href="../list">List All Package</a></li>
-                                      <li class="active"><a href="../add">Add New Package</a></li>
+                                        <li><a href="${contextPath}/${role}/package/list">List All Package</a></li>
+                                        <li><a href="${contextPath}/${role}/package/add">Add New Package</a></li>
                                     </ul>
                                 </li>
                                 <li class="submenu"><a href="#">Order</a>
                                     <ul class="menu">
-                                      <li><a href="newOrder.html">Add New Order</a></li>
-                                      <li><a href="managePackage.html">Manage Order</a></li>
+                                        <li><a href="newOrder.html">Add New Order</a></li>
+                                        <li><a href="managePackage.html">Manage Order</a></li>
                                     </ul>
                                 </li>
                             </div>
@@ -108,7 +108,7 @@
 
                     <div class="col-sm-9">
                         <div class="mainArea">
-                            <div class="title"><h1>Update Package</h1></div>
+                            <div class="title"><h1>Update Profile</h1></div>
                             <c:if test="${em != null}">
                               <div class="alert alert-danger alert-dismissible fade in">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -121,63 +121,93 @@
                                 ${sm}
                               </div>
                             </c:if>
-                            <div class="panel panel-primary">
-                                <div class="panel-body">
-                                    <form:form action="../update" cssClass="form-horizontal" method="POST" modelAttribute="pack">
-                                        <!-- need to associate this data with package id -->
+                            <div class="row">
+                                <div class="col-sm-4" style="border-right: 1px solid gray">
+                                    <img src="${contextPath}/img/me.jpeg" class="img-thumbnail img-responsive" alt="Profile Pic">
+                                    <br><br>
+                                    <form action="${contextPath}/profile/updatePicture" cssClass="form-horizontal" method="POST" enctype="multipart/form-data">
+                                        <input type="file" name="imgUrl" class="form-control"/>
+                                        <input type="submit" value="Upload Image" class="btn btn-primary" />
+                                    </form>
+                                </div>
+                                <div class="col-sm-8">
+                                    <form:form action="${contextPath}/profile/update" cssClass="form-horizontal" method="POST" modelAttribute="userForm">
+                                        <!-- need to associate this data with user id -->
                                         <form:hidden path="id" />
+                                        <form:errors path="id"></form:errors>
+                                        <c:if test="${role == 'admin'}">
                                         <div class="form-group">
-                                            <label for="pName" class="col-md-3 control-label">Name:</label>
+                                            <label for="locked" class="col-md-3 control-label">Locked:</label>
                                             <div class="col-md-9">
-                                                <form:input path="pName" type="text" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="price" class="col-md-3 control-label">Price:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="price" type="number" step="0.00000001" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="sms" class="col-md-3 control-label">Sms:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="sms" type="number" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="duration" class="col-md-3 control-label">Duration:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="duration" type="number" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="type" class="col-md-3 control-label">Type:</label>
-                                            <div class="col-md-9">
-                                                <form:select path="type" cssClass="form-control" required="required">
-                                                    <form:option value="" label="--- Select ---" />
-                                                    <form:options items="${types}" />
+                                                <form:select path="locked" cssClass="form-control" required="required">
+                                                    <form:option value="true" label="LOCKED" />
+                                                    <form:option value="false" label="UNLOCKED" />
                                                 </form:select>
                                             </div>
-                                        </div>
-                                       <div class="form-group">
-                                            <label for="activated" class="col-md-3 control-label">Activated:</label>
+                                        </div>                                            
+                                        </c:if>
+                                        <div class="form-group ${status.error ? 'has-error' : ''}"">
+                                            <label for="email" class="col-md-3 control-label">Email:</label>
                                             <div class="col-md-9">
-                                                <form:select path="activated" cssClass="form-control" required="required">
-                                                    <form:option value="true" label="Active" />
-                                                    <form:option value="false" label="Deactive" />
-                                                </form:select>
+                                                <form:input path="email" type="email" cssClass="form-control" required="required" readonly="true"/>
+                                                <form:errors path="email"></form:errors>
                                             </div>
                                         </div>
-
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="firstName" class="col-md-3 control-label">First Name:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="firstName" type="text" cssClass="form-control" required="required" />
+                                                <form:errors path="firstName"></form:errors>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="lastName" class="col-md-3 control-label">Last Name:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="lastName" type="text" cssClass="form-control" required="required" />
+                                                <form:errors path="lastName"></form:errors>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="address" class="col-md-3 control-label">Address:</label>
+                                            <div class="col-md-9">
+                                                <form:textarea path="address" rows="2" cols="20" cssClass="form-control" />
+                                                <form:errors path="address"></form:errors>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="nid" class="col-md-3 control-label">NID:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="nid" type="text" cssClass="form-control" />
+                                                <form:errors path="nid"></form:errors>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="dob" class="col-md-3 control-label">Date of Birth:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="dob" type="text" cssClass="form-control datepicker" />
+                                                <form:errors path="dob"></form:errors>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <div class="col-md-offset-3 col-md-9">
-                                                <button class="btn btn-primary" type="submit">Update</button>
-                                                <a href="../list" class="btn btn-warning">Cancel</a>
+                                                <button type="submit" class="btn btn-primary">Update</button>
+                                                <a href="${contextPath}/dashboard" class="btn btn-warning">Cancel</a>
                                             </div>
                                         </div>
                                     </form:form>
                                 </div>
                             </div>
+                            <hr>
+                            <h2>Change Password</h2>
+                            <form action="${contextPath}/profile/updatePassword" method="POST" class="form-inline" >
+                                <div class="form-group row">
+                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                    <input type="hidden" name="userEmail" value="${userForm.email}" />
+                                    <input type="password" name="password" class="form-control" placeholder="Enter Password" required/>
+                                    <input type="password" name="passwordConfirm" class="form-control" placeholder="Repeat Password" required/>
+                                    <input type="submit" value="Change Password" class="btn btn-primary" />
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -227,10 +257,9 @@
         <!-- script -->
         <script src="${contextPath}/webjars/jquery/3.4.1/jquery.min.js"></script>
         <!--bootstrap after jquery-->
-        <script src="${contextPath}/webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/dataTables.bootstrap.min.js"></script>
-
+        <script src="${contextPath}/webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>        
+        <script src="${contextPath}/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        
         <script src="${contextPath}/js/loader.js"></script>
         <!-- script end -->
     </body>

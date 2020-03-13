@@ -58,7 +58,7 @@
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="${contextPath}/${urlRole}" class="btn">Dashboard </a> 
+                                    <a href="${contextPath}/dashboard" class="btn">Dashboard </a> 
                                 </li>
                                 <!--in spring csrf logout implement on post with csrf token & header-->
                                 <li>
@@ -85,8 +85,8 @@
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
                                 <h4>${lastName}</h4>
-                                <a href="#" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
-                                <a href="#" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                                <a href="../../profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+                                <a href="../../profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
                             </div>
                             <div class="sidemenu">
@@ -109,8 +109,14 @@
                     <div class="col-sm-9">
                         <div class="mainArea">
                             <div class="title"><h1>List Package</h1></div>
+                            <c:if test="${em != null}">
+                              <div class="alert alert-danger alert-dismissible fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                ${em}
+                              </div>
+                            </c:if>
                             <c:if test="${sm != null}">
-                            <div class="alert alert-info alert-dismissible fade in">
+                              <div class="alert alert-success alert-dismissible fade in">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 ${sm}
                               </div>
@@ -119,7 +125,7 @@
                                 <table id="datatable" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>pId</th>
+                                            <th>Activated</th>
                                             <th>Name</th>
                                             <th>Price</th>
                                             <th>Sms</th>
@@ -131,7 +137,12 @@
                                     <tbody>
                                         <c:forEach var="pack" items="${packages}">
                                             <tr>
-                                                <td>${pack.id}</td>
+                                                <c:if test="${pack.activated == 'true'}">
+                                                    <td>Activated</td>
+                                                </c:if>
+                                                <c:if test="${pack.activated == 'false'}">
+                                                    <td>Deactivated</td>
+                                                </c:if>
                                                 <td>${pack.pName}</td>
                                                 <td>${pack.price}</td>
                                                 <td>${pack.sms}</td>
@@ -200,19 +211,7 @@
         <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/dataTables.bootstrap.min.js"></script>
 
-        <script type="text/javascript">
-          $(document).ready(function() {
-              $('#datatable').DataTable();
-              $('.dataTables_length').addClass('bs-select');
-
-              $(".submenu").addClass("icn");
-              $(".submenu .menu").hide();
-              $(".sidemenu li.submenu").hover(function() {
-                      $(this).children(".menu").toggle("slow");
-                      $(this).toggleClass("icn");
-              });
-          });
-        </script>
+        <script src="${contextPath}/js/loader.js"></script>
         <!-- script end -->
     </body>
 </html>

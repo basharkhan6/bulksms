@@ -26,6 +26,7 @@ public class Package {
     private int sms;
     private String type;
     private int duration;
+    private boolean activated;
 
     public Integer getId() {
         return id;
@@ -74,5 +75,14 @@ public class Package {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    public boolean isActivated() {
+        return activated;
+    }
+
+    public void setActivated(boolean activated) {
+        this.activated = activated;
+    }
+
 
 }

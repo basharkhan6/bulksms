@@ -20,6 +20,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  *
@@ -27,15 +29,18 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SecurityServiceImpl implements SecurityService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
     
     @Autowired
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
     private UserDetailsService userDetailsService;
 
-    private static final Logger logger = LoggerFactory.getLogger(SecurityServiceImpl.class);
     
     @Override
     public User findLoggedUser() {
@@ -46,20 +51,25 @@ public class SecurityServiceImpl implements SecurityService {
         }
         return loggedUser;
     }
-    
-    public boolean matchRole(String checkRole) {
-        User user = findLoggedUser();
-        if(user != null) {
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-            for(GrantedAuthority authority : auth.getAuthorities()) {
-                if(checkRole.equals(authority.toString())) {
-                    return true;
-                }
-            }
-            return false;
+
+    @Override
+    public String findUserRole() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            String role = auth.getAuthorities().toString();
+            return role.substring(1, role.length()-1);
         }
-        return false;
-    };
+        return null;
+    }
+
+    @Override
+    public String findUserEmail() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (!(auth instanceof AnonymousAuthenticationToken)) {
+            return auth.getName();
+        }
+        return null;
+    }
         
     @Override
     public void autoLogin(String username, String password) {
@@ -73,4 +83,5 @@ public class SecurityServiceImpl implements SecurityService {
             logger.debug(String.format("Auto login %s successfully!", username));
         }
     }
+
 }

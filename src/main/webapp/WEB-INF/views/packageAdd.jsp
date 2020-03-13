@@ -58,7 +58,7 @@
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="${contextPath}/${urlRole}" class="btn">Dashboard </a> 
+                                    <a href="${contextPath}/dashboard" class="btn">Dashboard </a> 
                                 </li>
                                 <!--in spring csrf logout implement on post with csrf token & header-->
                                 <li>
@@ -85,8 +85,8 @@
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
                                 <h4>${lastName}</h4>
-                                <a href="#" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
-                                <a href="#" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Edit</a>
+                                <a href="../../profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+                                <a href="../../profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
                             </div>
                             <div class="sidemenu">
@@ -111,31 +111,31 @@
                             <div class="title"><h1>Add Package</h1></div>
                             <div class="panel panel-primary">
                                 <div class="panel-body">
-                                    <form:form action="add" cssClass="form-horizontal" method="post" modelAttribute="pack">
+                                    <form:form action="add" cssClass="form-horizontal" method="POST" modelAttribute="pack">
                                         <!-- need to associate this data with package id -->
                                         <form:hidden path="id" />
                                         <div class="form-group">
                                             <label for="pName" class="col-md-3 control-label">Name:</label>
                                             <div class="col-md-9">
-                                                <form:input path="pName" cssClass="form-control" required="required"/>
+                                                <form:input path="pName" type="text" cssClass="form-control" required="required"/>
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="price" class="col-md-3 control-label">Price:</label>
                                             <div class="col-md-9">
-                                                <form:input path="price" cssClass="form-control" required="required" />
+                                                <form:input path="price" type="number" step="0.0001" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="sms" class="col-md-3 control-label">Sms:</label>
                                             <div class="col-md-9">
-                                                <form:input path="sms" cssClass="form-control" required="required" />
+                                                <form:input path="sms" type="number" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="duration" class="col-md-3 control-label">Duration:</label>
                                             <div class="col-md-9">
-                                                <form:input path="duration" cssClass="form-control" required="required" />
+                                                <form:input path="duration" type="number" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
                                         <div class="form-group">
@@ -147,10 +147,19 @@
                                                 </form:select>
                                             </div>
                                         </div>
+                                       <div class="form-group">
+                                            <label for="activated" class="col-md-3 control-label">Activated:</label>
+                                            <div class="col-md-9">
+                                                <form:select path="activated" cssClass="form-control" required="required">
+                                                    <form:option value="true" label="Active" />
+                                                    <form:option value="false" label="Deactive" />
+                                                </form:select>
+                                            </div>
+                                        </div>
 
                                         <div class="form-group">
                                             <div class="col-md-offset-3 col-md-9">
-                                                <button class="btn btn-primary">Submit</button>
+                                                <button class="btn btn-primary" type="submit">Submit</button>
                                                 <a href="list" class="btn btn-warning">Cancel</a>
                                             </div>
                                         </div>
@@ -210,15 +219,7 @@
         <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/dataTables.bootstrap.min.js"></script>
 
-        <script type="text/javascript">
-          $(document).ready(function() {
-              $(".submenu").addClass("icn");
-              $(".submenu .menu").hide();
-              $(".sidemenu li.submenu").hover(function() {
-                      $(this).children(".menu").toggle("slow");
-                      $(this).toggleClass("icn");
-              });
-          });
+        <script src="${contextPath}/js/loader.js"></script>
         </script>
         <!-- script end -->
     </body>

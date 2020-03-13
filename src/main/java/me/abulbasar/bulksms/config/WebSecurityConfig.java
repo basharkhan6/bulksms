@@ -23,6 +23,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
     @Qualifier("userDetailsServiceImpl")
     @Autowired
     private UserDetailsService userDetailsService;
@@ -40,10 +41,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/**").hasAuthority("USER")
                 .antMatchers("/admin/**").hasAuthority("ADMIN")
                 .antMatchers("/dashboard").hasAnyAuthority("USER","ADMIN")
+                .antMatchers("/profile").hasAnyAuthority("USER","ADMIN")
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
-                .loginPage("/login").defaultSuccessUrl("/home").usernameParameter("email").permitAll()
+                .loginPage("/login").defaultSuccessUrl("/dashboard").usernameParameter("email").permitAll()
                 .and()
             .logout()
                 .logoutSuccessUrl("/login").deleteCookies("JSESSIONID").invalidateHttpSession(true).permitAll();
@@ -53,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         web
             .ignoring()
-            .antMatchers("/webjars/**", "/css/**", "/img/**");
+            .antMatchers("/webjars/**", "/css/**", "/js/**", "/img/**");
     }
 
     @Bean

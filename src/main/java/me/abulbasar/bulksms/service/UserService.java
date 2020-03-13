@@ -14,6 +14,9 @@ import me.abulbasar.bulksms.model.User;
 public interface UserService {
     
     void save(User user);
+    
+    void saveAdmin(User user);
+    
     User findByEmail(String email);
 
 }

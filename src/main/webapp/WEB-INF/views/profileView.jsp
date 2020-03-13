@@ -1,13 +1,13 @@
 <%-- 
-    Document   : packageUpdate
-    Created on : Feb 26, 2020, 3:37:18 AM
+    Document   : profileView
+    Created on : Mar 1, 2020, 7:11:55 PM
     Author     : Bashar
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%--<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
+<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -18,11 +18,10 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <title>Package | BulkSMS</title>
+        <title>Profile | BulkSMS</title>
         <!-- styles -->
         <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/font-awesome/5.12.0/css/all.min.css" />
         <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/bootstrap/3.4.1/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="${contextPath}/webjars/datatables/1.10.20/css/jquery.dataTables.min.css" />
         <!--main/custom css after bootstrap-->
         <link href="${contextPath}/css/main.css" rel="stylesheet" />
         <!-- style end -->
@@ -85,21 +84,21 @@
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
                                 <h4>${lastName}</h4>
-                                <a href="../../../profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
-                                <a href="../../../profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
+                                <a href="${contextPath}/profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
+                                <a href="${contextPath}/profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
                             </div>
                             <div class="sidemenu">
                                 <li class="submenu"><a href="#">Package</a>
                                     <ul class="menu">
-                                        <li><a href="../list">List All Package</a></li>
-                                      <li class="active"><a href="../add">Add New Package</a></li>
+                                        <li><a href="${contextPath}/${role}/package/list">List All Package</a></li>
+                                        <li><a href="${contextPath}/${role}/package/add">Add New Package</a></li>
                                     </ul>
                                 </li>
                                 <li class="submenu"><a href="#">Order</a>
                                     <ul class="menu">
-                                      <li><a href="newOrder.html">Add New Order</a></li>
-                                      <li><a href="managePackage.html">Manage Order</a></li>
+                                        <li><a href="newOrder.html">Add New Order</a></li>
+                                        <li><a href="managePackage.html">Manage Order</a></li>
                                     </ul>
                                 </li>
                             </div>
@@ -108,74 +107,48 @@
 
                     <div class="col-sm-9">
                         <div class="mainArea">
-                            <div class="title"><h1>Update Package</h1></div>
-                            <c:if test="${em != null}">
-                              <div class="alert alert-danger alert-dismissible fade in">
-                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                                ${em}
-                              </div>
-                            </c:if>
+                            <div class="title"><h1>Profile</h1></div>
                             <c:if test="${sm != null}">
                               <div class="alert alert-success alert-dismissible fade in">
                                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                                 ${sm}
                               </div>
                             </c:if>
-                            <div class="panel panel-primary">
-                                <div class="panel-body">
-                                    <form:form action="../update" cssClass="form-horizontal" method="POST" modelAttribute="pack">
-                                        <!-- need to associate this data with package id -->
-                                        <form:hidden path="id" />
-                                        <div class="form-group">
-                                            <label for="pName" class="col-md-3 control-label">Name:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="pName" type="text" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="price" class="col-md-3 control-label">Price:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="price" type="number" step="0.00000001" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="sms" class="col-md-3 control-label">Sms:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="sms" type="number" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="duration" class="col-md-3 control-label">Duration:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="duration" type="number" cssClass="form-control" required="required" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="type" class="col-md-3 control-label">Type:</label>
-                                            <div class="col-md-9">
-                                                <form:select path="type" cssClass="form-control" required="required">
-                                                    <form:option value="" label="--- Select ---" />
-                                                    <form:options items="${types}" />
-                                                </form:select>
-                                            </div>
-                                        </div>
-                                       <div class="form-group">
-                                            <label for="activated" class="col-md-3 control-label">Activated:</label>
-                                            <div class="col-md-9">
-                                                <form:select path="activated" cssClass="form-control" required="required">
-                                                    <form:option value="true" label="Active" />
-                                                    <form:option value="false" label="Deactive" />
-                                                </form:select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="col-md-offset-3 col-md-9">
-                                                <button class="btn btn-primary" type="submit">Update</button>
-                                                <a href="../list" class="btn btn-warning">Cancel</a>
-                                            </div>
-                                        </div>
-                                    </form:form>
+                            <c:if test="${em != null}">
+                              <div class="alert alert-danger alert-dismissible fade in">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                                ${em}
+                              </div>
+                            </c:if>
+                            <div class="row">
+                                <div class="col-sm-4" style="border-right: 1px solid gray">
+                                    <img src="${contextPath}/img/me.jpeg" class="img-thumbnail img-responsive" alt="Profile Pic">
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <c:if test="${user.locked == 'true'}">
+                                            <tr><th>Locked:</th><th>Locked</th></tr>
+                                            </c:if>
+                                            <c:if test="${user.locked == 'false'}">
+                                                <tr><th>Locked:</th><th>Unlocked</th></tr>
+                                            </c:if>
+                                            <tr><th>Email:</th><th>${user.email}</th></tr>
+                                            <tr><td>First Name:</td><td>${user.firstName}</td></tr>
+                                            <tr><td>First Name:</td><td>${user.lastName}</td></tr>
+                                            <tr><td>Address:</td><td>${user.address}</td></tr>
+                                            <tr><td>NID:</td><td>${user.nid}</td></tr>
+                                            <tr><td>Date of Birth:</td><td>${user.dob}</td></tr>
+                                            <tr>
+                                                <td>Role(s):</td>
+                                                <td>
+                                                    <c:forEach var="r" items="${user.roles}">
+                                                        ${r.name} 
+                                                    </c:forEach>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -228,9 +201,7 @@
         <script src="${contextPath}/webjars/jquery/3.4.1/jquery.min.js"></script>
         <!--bootstrap after jquery-->
         <script src="${contextPath}/webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/dataTables.bootstrap.min.js"></script>
-
+        
         <script src="${contextPath}/js/loader.js"></script>
         <!-- script end -->
     </body>
