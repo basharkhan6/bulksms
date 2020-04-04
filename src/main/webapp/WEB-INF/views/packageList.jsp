@@ -6,10 +6,16 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
+<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>--%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<sec:authorize access="hasAuthority('ADMIN')">
+    <c:set var = "role" value = "admin" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('USER')">
+    <c:set var = "role" value = "user" />
+</sec:authorize>
 
 
 <!DOCTYPE html>
@@ -84,7 +90,7 @@
                         <div class="sidebar">
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
-                                <h4>${lastName}</h4>
+                                <h4><sec:authentication property="name"/></h4>
                                 <a href="../../profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                                 <a href="../../profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
@@ -129,7 +135,7 @@
                                             <th>Name</th>
                                             <th>Price</th>
                                             <th>Sms</th>
-                                            <th>Duration</th>
+                                            <th>Validity</th>
                                             <th>Type</th>
                                             <th>Action</th>
                                         </tr>
@@ -137,17 +143,12 @@
                                     <tbody>
                                         <c:forEach var="pack" items="${packages}">
                                             <tr>
-                                                <c:if test="${pack.activated == 'true'}">
-                                                    <td>Activated</td>
-                                                </c:if>
-                                                <c:if test="${pack.activated == 'false'}">
-                                                    <td>Deactivated</td>
-                                                </c:if>
+                                                <td>${pack.status}</td>
                                                 <td>${pack.pName}</td>
                                                 <td>${pack.price}</td>
                                                 <td>${pack.sms}</td>
-                                                <td>${pack.duration}</td>
-                                                <td>${pack.type}</td>
+                                                <td>${pack.validity}</td>
+                                                <td>${pack.packageType}</td>
 
                                                 <td>                                                    
                                                     <a href="update/${pack.id}" class="btn btn-sm btn-warning"> <i class="glyphicon glyphicon-pencil"></i></a>
@@ -210,8 +211,14 @@
         <script src="${contextPath}/webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript" src="${contextPath}/webjars/datatables/1.10.20/js/dataTables.bootstrap.min.js"></script>
-
-        <script src="${contextPath}/js/loader.js"></script>
+        <!--common js-->
+        <script src="${contextPath}/js/loader.js"></script>                
+        <!--page specific js-->
+        <script>
+            $(document).ready(function() {
+                $('#datatable').DataTable();
+            });
+        </script>
         <!-- script end -->
     </body>
 </html>

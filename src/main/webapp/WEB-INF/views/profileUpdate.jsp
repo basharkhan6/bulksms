@@ -6,10 +6,17 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%--<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<sec:authorize access="hasAuthority('ADMIN')">
+    <c:set var = "role" value = "admin" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('USER')">
+    <c:set var = "role" value = "user" />
+</sec:authorize>
 
 
 <!DOCTYPE html>
@@ -84,7 +91,7 @@
                         <div class="sidebar">
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
-                                <h4>${lastName}</h4>
+                                <h4><sec:authentication property="name"/></h4>
                                 <a href="${contextPath}/profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                                 <a href="${contextPath}/profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
@@ -133,61 +140,134 @@
                                 <div class="col-sm-8">
                                     <form:form action="${contextPath}/profile/update" cssClass="form-horizontal" method="POST" modelAttribute="userForm">
                                         <!-- need to associate this data with user id -->
-                                        <form:hidden path="id" />
+                                        <form:hidden path="id"/>
                                         <form:errors path="id"></form:errors>
                                         <c:if test="${role == 'admin'}">
-                                        <div class="form-group">
-                                            <label for="locked" class="col-md-3 control-label">Locked:</label>
-                                            <div class="col-md-9">
-                                                <form:select path="locked" cssClass="form-control" required="required">
-                                                    <form:option value="true" label="LOCKED" />
-                                                    <form:option value="false" label="UNLOCKED" />
-                                                </form:select>
+                                            <spring:bind path="status">
+                                            <div class="form-group">
+                                                <label for="locked" class="col-md-3 control-label">Status:</label>
+                                                <div class="col-md-9">
+                                                    <form:select path="status" cssClass="form-control" required="required">
+                                                        <form:option value="" label="--- Select ---" />
+                                                        <form:options items="${statusEnum}" />
+                                                    </form:select>
+                                                </div>
                                             </div>
-                                        </div>                                            
+                                            </spring:bind>
                                         </c:if>
-                                        <div class="form-group ${status.error ? 'has-error' : ''}"">
-                                            <label for="email" class="col-md-3 control-label">Email:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="email" type="email" cssClass="form-control" required="required" readonly="true"/>
-                                                <form:errors path="email"></form:errors>
-                                            </div>
-                                        </div>
+                                        <spring:bind path="profile.firstName">
                                         <div class="form-group ${status.error ? 'has-error' : ''}">
                                             <label for="firstName" class="col-md-3 control-label">First Name:</label>
                                             <div class="col-md-9">
-                                                <form:input path="firstName" type="text" cssClass="form-control" required="required" />
-                                                <form:errors path="firstName"></form:errors>
+                                                <form:input path="profile.firstName" type="text" cssClass="form-control" required="required" />
+                                                <form:errors path="profile.firstName"></form:errors>
                                             </div>
                                         </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.lastName">
                                         <div class="form-group ${status.error ? 'has-error' : ''}">
                                             <label for="lastName" class="col-md-3 control-label">Last Name:</label>
                                             <div class="col-md-9">
-                                                <form:input path="lastName" type="text" cssClass="form-control" required="required" />
-                                                <form:errors path="lastName"></form:errors>
+                                                <form:input path="profile.lastName" type="text" cssClass="form-control" required="required" />
+                                                <form:errors path="profile.lastName"></form:errors>
                                             </div>
                                         </div>
-                                        <div class="form-group ${status.error ? 'has-error' : ''}">
-                                            <label for="address" class="col-md-3 control-label">Address:</label>
-                                            <div class="col-md-9">
-                                                <form:textarea path="address" rows="2" cols="20" cssClass="form-control" />
-                                                <form:errors path="address"></form:errors>
-                                            </div>
-                                        </div>
-                                        <div class="form-group ${status.error ? 'has-error' : ''}">
-                                            <label for="nid" class="col-md-3 control-label">NID:</label>
-                                            <div class="col-md-9">
-                                                <form:input path="nid" type="text" cssClass="form-control" />
-                                                <form:errors path="nid"></form:errors>
-                                            </div>
-                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.dob">
                                         <div class="form-group ${status.error ? 'has-error' : ''}">
                                             <label for="dob" class="col-md-3 control-label">Date of Birth:</label>
                                             <div class="col-md-9">
-                                                <form:input path="dob" type="text" cssClass="form-control datepicker" />
-                                                <form:errors path="dob"></form:errors>
+                                                <form:input path="profile.dob" type="text" cssClass="form-control datepicker" />
+                                                <form:errors path="profile.dob"></form:errors>
                                             </div>
                                         </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.gender">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="gender" class="col-md-3 control-label">Gender:</label>
+                                            <div class="col-md-9">
+                                                <form:select path="profile.gender" cssClass="form-control" required="required">
+                                                    <form:option value="" label="--- Select ---" />
+                                                    <form:options items="${genderEnum}" />
+                                                </form:select>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.nid">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="nid" class="col-md-3 control-label">NID:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="profile.nid" type="text" cssClass="form-control" />
+                                                <form:errors path="profile.nid"></form:errors>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.companyName">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="companyName" class="col-md-3 control-label">Company Name:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="profile.companyName" type="text" cssClass="form-control" required="required"/>
+                                                <form:errors path="profile.companyName"></form:errors>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.address1">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="address1" class="col-md-3 control-label">Address 1:</label>
+                                            <div class="col-md-9">
+                                                <form:textarea path="profile.address1" rows="2" cols="20" cssClass="form-control" required="required" />
+                                                <form:errors path="profile.address1"></form:errors>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.address2">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="address2" class="col-md-3 control-label">Address 2:(Optional)</label>
+                                            <div class="col-md-9">
+                                                <form:textarea path="profile.address2" rows="2" cols="20" cssClass="form-control" />
+                                                <form:errors path="profile.address2"></form:errors>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.city">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="city" class="col-md-3 control-label">City:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="profile.city" type="text" cssClass="form-control" required="required" />
+                                                <form:errors path="profile.city"></form:errors>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.region">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="region" class="col-md-3 control-label">State/Region:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="profile.region" type="text" cssClass="form-control" required="required" />
+                                                <form:errors path="profile.region"></form:errors>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.zip">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="zip" class="col-md-3 control-label">Zip:</label>
+                                            <div class="col-md-9">
+                                                <form:input path="profile.zip" type="text" cssClass="form-control" required="required" />
+                                                <form:errors path="profile.zip"></form:errors>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        <spring:bind path="profile.country">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="country" class="col-md-3 control-label">Country:</label>
+                                            <div class="col-md-9">
+                                                <form:select path="profile.country" cssClass="form-control" required="required">
+                                                    <form:option value="" label="--- Select ---" />
+                                                    <form:options items="${countryEnum}" />
+                                                </form:select>
+                                            </div>
+                                        </div>
+                                        </spring:bind>
+                                        
                                         <div class="form-group">
                                             <div class="col-md-offset-3 col-md-9">
                                                 <button type="submit" class="btn btn-primary">Update</button>
@@ -259,8 +339,16 @@
         <!--bootstrap after jquery-->
         <script src="${contextPath}/webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>        
         <script src="${contextPath}/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-        
-        <script src="${contextPath}/js/loader.js"></script>
+        <!--common js-->
+        <script src="${contextPath}/js/loader.js"></script>                
+        <!--page specific js-->
+        <script>
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                endDate: '0d',
+                todayHighlight: true
+            });
+        </script>
         <!-- script end -->
     </body>
 </html>

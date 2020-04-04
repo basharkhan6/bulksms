@@ -5,18 +5,22 @@
  */
 package me.abulbasar.bulksms.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import me.abulbasar.bulksms.model.User;
 import me.abulbasar.bulksms.service.SecurityService;
 import me.abulbasar.bulksms.service.UserService;
 import me.abulbasar.bulksms.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -47,7 +51,7 @@ public class SecurityController {
                                BindingResult bindingResult,
                                RedirectAttributes redirectAttributes) {
         userValidator.validate(userForm, bindingResult);
-        if (bindingResult.hasErrors()) {
+        if(bindingResult.hasErrors()) {
             return "registration";
         }
         userService.save(userForm);
@@ -60,15 +64,18 @@ public class SecurityController {
 
     @GetMapping("/login")
     public String login(Model model, String error, String logout) {
-
         return "login";
     }
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        model.addAttribute("role", securityService.findUserRole().toLowerCase());
-        
         return "dashboard";
     }
 
+    @InitBinder
+    public void initBinder(WebDataBinder binder) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf.setLenient(true);
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
+    }
 }

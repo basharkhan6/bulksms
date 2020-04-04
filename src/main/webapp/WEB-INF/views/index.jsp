@@ -6,6 +6,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
@@ -53,8 +55,27 @@
                                 <li><a href="#">Contact</a></li>
                             </ul>
                             <ul class="nav navbar-nav navbar-right">
-                                <li><a href="${contextPath}/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                                <li><a href="${contextPath}/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                                <c:if test="${sessionScope.cart != null}">
+                                    <li><a href="${contextPath}/cart/index"><i class="fas fa-shopping-cart label label-success">${fn:length(sessionScope.cart)}</i></a></li>
+                                </c:if>
+                                <sec:authorize access="!isAuthenticated()">
+                                    <li><a href="${contextPath}/registration"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                                    <li><a href="${contextPath}/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                                </sec:authorize>
+                                <sec:authorize access="isAuthenticated()">
+                                <li>
+                                    <a href="${contextPath}/dashboard" class="btn">Dashboard </a> 
+                                </li>
+
+                                <li>
+                                    <form action="${contextPath}/logout" method="post" class="navbar-form">
+                                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                                        <div class="form-group">
+                                            <input type="submit" class="btn btn-danger" value="Logout" />
+                                        </div>
+                                    </form>
+                                </li>
+                                </sec:authorize>
                             </ul>
                         </div><!-- /.navbar-collapse -->
                     </div><!-- /.container-fluid -->
@@ -129,120 +150,23 @@
                 <div class="container">
                     <h2 class="text-center"><u>Popular Package</u></h2>
                     <div class="row">
+                        <c:forEach var="pack" items="${packs}">
                         <div class="col-sm-3">
                             <div class="package">
+                                <strong>${pack.pName}</strong><hr>
                                 <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">NON-MASKING</div>
+                                    <sup>BDT</sup> <span>${pack.price}</span><sub>/sms</sub>
+                                    <div class="type">${pack.packageType}</div>
                                 </div>
                                 <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
+                                <strong>Validity: </strong>${pack.validity} Days<hr>
+                                <strong>Quantity: </strong>${pack.sms} SMS <hr>
+                                <del><strong>Price: </strong>BDT ${pack.price*pack.sms} Tk </del><br>
+                                <strong>New Price: </strong>BDT ${pack.price*pack.sms} Tk <hr>
+                                <a href="cart/add/${pack.id}" class="btn btn-success">Buy Now</a>
                             </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="package">
-                                <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">NON-MASKING</div>
-                                </div>
-                                <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="package">
-                                <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">NON-MASKING</div>
-                                </div>
-                                <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="package">
-                                <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">NON-MASKING</div>
-                                </div>
-                                <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <div class="package">
-                                <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">MASKING</div>
-                                </div>
-                                <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="package">
-                                <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">MASKING</div>
-                                </div>
-                                <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="package">
-                                <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">MASKING</div>
-                                </div>
-                                <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="package">
-                                <div class="persms">
-                                    <sup>BDT</sup> <span>0.35</span><sub>/sms</sub>
-                                    <div class="type">MASKING</div>
-                                </div>
-                                <hr>
-                                <strong>Validity: </strong>One Year <hr>
-                                <strong>Quantity: </strong>1,000 SMS <hr>
-                                <del><strong>Price: </strong>BDT 400 Tk </del><br>
-                                <strong>New Price: </strong>BDT 350 Tk <hr>
-                                <a href="#" class="btn btn-success">Buy Now</a>
-                            </div>
-                        </div>
+                        </div>                            
+                        </c:forEach>
                     </div>
                 </div>
             </section>

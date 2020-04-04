@@ -16,9 +16,23 @@ and open the template in the editor.
 h1, h2, h3, h4 {
   font-weight: bold;
 }
+.p-10 {
+    padding: 10px;
+}
 .pt-60 {
     padding-top: 60px;
 }
+
+.shade {
+  -webkit-box-shadow: 0px 0px 10px -5px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 10px -5px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 10px -5px rgba(0,0,0,0.75);
+}
+
+.nav .fa-shopping-cart {
+  font-size: 16px;
+}
+
 .front {
   /*padding-top: 60px;*/
   background-color: #e6e6e6;
@@ -122,8 +136,6 @@ footer .social {
 
 
 
-
-
 .sidebar {
   border: 1px solid gray;
   border-radius: 5px;
@@ -173,7 +185,6 @@ footer .social {
 }
 
 
-
 .mainArea {
   border: 1px solid gray;
   border-radius: 5px;
@@ -184,9 +195,4 @@ footer .social {
 .mainArea .title {
   border-bottom: 1px solid gray;
   margin-bottom: 20px;
-}
-
-
-.show {
-  display: block;
 }

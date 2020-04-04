@@ -71,15 +71,19 @@
                         <h2>Login</h2>
                     </div>
                     <hr>
-                    <div class="form-group ${error != null ? 'has-error' : ''}">
-                        <span>${message}</span>
+                    <span>${message}</span>
+                    <div class="form-group ${param.error != null ? 'has-error' : ''}">
                         <input name="email" type="email" class="form-control" placeholder="Email" autofocus="true"/><br>
+                    <div>
+                    <div class="form-group ${param.error != null ? 'has-error' : ''}">
                         <input name="password" type="password" class="form-control" placeholder="Password"/>
-                        <span>${error}</span><br>
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
-                        <h4 class="text-center"><a href="registration">Create an account</a></h4>
                     </div>
+                    <c:if test="${param.error != null}">
+                        <span>Invalid username or password.</span><br>                            
+                    </c:if>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Log In</button>
+                    <h4 class="text-center"><a href="registration">Create an account</a></h4>
                 </form>
             </div>
         </main>

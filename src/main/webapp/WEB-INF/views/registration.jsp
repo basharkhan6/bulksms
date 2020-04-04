@@ -7,6 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%--<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
@@ -21,7 +22,8 @@
         <!-- styles -->
         <link rel="stylesheet" type="text/css" href="webjars/font-awesome/5.12.0/css/all.min.css" />
         <link rel="stylesheet" type="text/css" href="webjars/bootstrap/3.4.1/css/bootstrap.min.css" />
-            <!--main/custom css after bootstrap-->
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+        <!--main/custom css after bootstrap-->
         <link href="${contextPath}/css/main.css" rel="stylesheet" />
         <!-- style end -->
     </head>
@@ -73,36 +75,100 @@
                     <hr>
                     <spring:bind path="email">
                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="email" path="email" class="form-control" placeholder="Email" autofocus="true"></form:input>
-                            <form:errors path="email"></form:errors>
-                            </div>
-                        </spring:bind>
-                        <spring:bind path="password">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
-                            <form:errors path="password"></form:errors>
-                            </div>
-                        </spring:bind>
-                        <spring:bind path="passwordConfirm">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="password" path="passwordConfirm" class="form-control" placeholder="Confirm your password"></form:input>
-                            <form:errors path="passwordConfirm"></form:errors>
-                            </div>
-                        </spring:bind>
-                        <spring:bind path="firstName">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" path="firstName" class="form-control" placeholder="First Name"></form:input>
-                            <form:errors path="firstName"></form:errors>
-                            </div>
-                        </spring:bind>
-                        <spring:bind path="lastName">
-                            <div class="form-group ${status.error ? 'has-error' : ''}">
-                            <form:input type="text" path="lastName" class="form-control" placeholder="Last Name"></form:input>
-                            <form:errors path="lastName"></form:errors>
-                            </div>
-                        </spring:bind>
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
-                        <h4 class="text-center"><a href="login">Login</a></h4>
+                        <form:input type="email" path="email" class="form-control" placeholder="Email" autofocus="true" required="required"></form:input>
+                        <form:errors path="email"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="password">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input type="password" path="password" class="form-control" placeholder="Password" required="required"></form:input>
+                        <form:errors path="password"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="passwordConfirm">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input type="password" path="passwordConfirm" class="form-control" placeholder="Confirm your password" required="required"></form:input>
+                        <form:errors path="passwordConfirm"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.firstName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.firstName" type="text" cssClass="form-control" placeholder="First Name" required="required" />
+                        <form:errors path="profile.firstName"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.lastName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.lastName" type="text" cssClass="form-control" placeholder="Last Name" required="required" />
+                        <form:errors path="profile.lastName"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.dob">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.dob" type="text" cssClass="form-control datepicker" placeholder="Date of Birth" />
+                        <form:errors path="profile.dob"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.gender">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:select path="profile.gender" cssClass="form-control" placeholder="Gender" required="required">
+                            <form:option value="" label="--- Select ---" />
+                            <form:options items="${genderEnum}" />
+                        </form:select>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.nid">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.nid" type="text" cssClass="form-control" placeholder="NID No" required="required" />
+                        <form:errors path="profile.nid"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.companyName">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.companyName" type="text" cssClass="form-control" placeholder="Company Name" required="required"/>
+                        <form:errors path="profile.companyName"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.address1">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:textarea path="profile.address1" rows="2" cols="20" cssClass="form-control" placeholder="Address 1" required="required" />
+                        <form:errors path="profile.address1"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.address2">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:textarea path="profile.address2" rows="2" cols="20" cssClass="form-control" placeholder="Adddress 2 (Optional)"/>
+                        <form:errors path="profile.address2"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.city">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.city" type="text" cssClass="form-control" placeholder="City" required="required" />
+                        <form:errors path="profile.city"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.region">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.region" type="text" cssClass="form-control" placeholder="State/Region" required="required" />
+                        <form:errors path="profile.region"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.zip">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:input path="profile.zip" type="text" cssClass="form-control" placeholder="Zip Code" required="required" />
+                        <form:errors path="profile.zip"></form:errors>
+                        </div>
+                    </spring:bind>
+                    <spring:bind path="profile.country">
+                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                        <form:select path="profile.country" cssClass="form-control" placeholder="Country" required="required">
+                            <form:option value="" label="--- Select ---" />
+                            <form:options items="${countryEnum}" />
+                        </form:select>
+                        </div>
+                    </spring:bind>
+                    <button class="btn btn-lg btn-primary btn-block" type="submit">Create</button>
+                    <h4 class="text-center"><a href="login">Login</a></h4>
                 </form:form>
             </div>
         </main>
@@ -149,8 +215,17 @@
 
         <!-- script -->
         <script src="webjars/jquery/3.4.1/jquery.min.js"></script>
-            <!--bootstrap after jquery-->
+        <!--bootstrap after jquery-->
         <script src="webjars/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <!--page specific js-->
+        <script>
+            $('.datepicker').datepicker({
+                format: 'yyyy-mm-dd',
+                endDate: '0d',
+                todayHighlight: true
+            });
+        </script>
         <!-- script end -->
     </body>
 </html>

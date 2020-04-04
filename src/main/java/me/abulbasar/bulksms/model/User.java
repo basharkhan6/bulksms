@@ -6,19 +6,21 @@
 package me.abulbasar.bulksms.model;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -29,28 +31,38 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    
     @Email
     @NotEmpty
     @Column(unique=true)
     private String email;
+    
     @NotEmpty
     private String password;
+    
     @Transient
     private String passwordConfirm;
-    @NotEmpty
-    private String firstName;
-    @NotEmpty
-    private String lastName;
-    @Column(columnDefinition = "TEXT")
-    private String address;
-    private String nid;
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private Date dob;
-    private String imgUrl;
-    private boolean locked;
+    
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status = StatusEnum.ACTIVE;
+    
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Profile profile;
+    
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
+    
+    public User() {
+    }
+
+    public User(String email, String password, String passwordConfirm, StatusEnum status) {
+        this.email = email;
+        this.password = password;
+        this.passwordConfirm = passwordConfirm;
+        this.status = status;
+    }
+    
     
     public Long getId() {
         return id;
@@ -84,60 +96,20 @@ public class User implements Serializable {
         this.passwordConfirm = passwordConfirm;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public StatusEnum getStatus() {
+        return status;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
 
-    public String getLastName() {
-        return lastName;
+    public Profile getProfile() {
+        return profile;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getNid() {
-        return nid;
-    }
-
-    public void setNid(String nid) {
-        this.nid = nid;
-    }
-
-    public Date getDob() {
-        return dob;
-    }
-
-    public void setDob(Date dob) {
-        this.dob = dob;
-    }
-
-    public String getImgUrl() {
-        return imgUrl;
-    }
-
-    public void setImgUrl(String imgUrl) {
-        this.imgUrl = imgUrl;
-    }
-
-    public boolean isLocked() {
-        return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
+    public void setProfile(Profile profile) {
+        this.profile = profile;
     }
 
     public Set<Role> getRoles() {

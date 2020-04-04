@@ -5,11 +5,9 @@
  */
 package me.abulbasar.bulksms.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import me.abulbasar.bulksms.exception.ResourceNotFoundException;
 import me.abulbasar.bulksms.model.Package;
-import me.abulbasar.bulksms.repository.PackageRepository;
+import me.abulbasar.bulksms.service.PackageService;
 import me.abulbasar.bulksms.service.SecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,20 +26,19 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("{role}/package")
 public class PackageController {
-
-    @Autowired
-    PackageRepository packageRepository;
     
     @Autowired
     SecurityService securityService;
+    
+    @Autowired
+    PackageService packageService;
 
 
     @GetMapping("/list")
     public String listPacage(Model model,
                              @PathVariable("role") String role) {
-        List<Package> packages = packageRepository.findAll();
+        List<Package> packages = packageService.findAll();
         model.addAttribute("packages", packages);
-        model.addAttribute("role", role);
 
         return "packageList";
     }
@@ -50,7 +47,6 @@ public class PackageController {
     public String addPage(Model model, @PathVariable("role") String role) {
         Package pack = new Package();
         model.addAttribute("pack", pack);
-        model.addAttribute("role", role);
 
         return "packageAdd";
     }
@@ -58,20 +54,16 @@ public class PackageController {
     @PostMapping("/add")
     public String addPackage(@ModelAttribute Package pack,
                              RedirectAttributes redirectAttributes) {
-        packageRepository.save(pack);
+        packageService.save(pack);
         redirectAttributes.addFlashAttribute("sm", "Package Add Successful");
         
         return "redirect:list";
     }
 
     @GetMapping("/update/{id}")
-    public String updatePage(Model model,
-                             @PathVariable("id") int id,
-                             @PathVariable("role") String role) {
-        Package pack = packageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Package", "id", id));
+    public String updatePage(Model model, @PathVariable("id") int id) {
+        Package pack = packageService.findById(id);
         model.addAttribute("pack", pack);
-        model.addAttribute("role", role);
 
         return "packageUpdate";
     }
@@ -83,46 +75,23 @@ public class PackageController {
             redirectAttributes.addFlashAttribute("em", "Unauthorized Access");
             return "redirect:list";
         }
-        
-        Package pack = packageRepository.findById(newPack.getId()).orElseThrow(
-                () -> new ResourceNotFoundException("Package", "id",
-                                                    newPack.getId()));
-        pack.setpName(newPack.getpName());
-        pack.setPrice(newPack.getPrice());
-        pack.setSms(newPack.getSms());
-        pack.setDuration(newPack.getDuration());
-        pack.setType(newPack.getType());
-        pack.setActivated(newPack.isActivated());
-        packageRepository.save(pack);
+        packageService.update(newPack);
         redirectAttributes.addFlashAttribute("sm", "Package Update Successful");
         
-        return "redirect:update/"+pack.getId();
+        return "redirect:update/"+newPack.getId();
     }
 
     @GetMapping("/delete/{id}")
     public String deletePackage(@PathVariable("id") int id,
                                 RedirectAttributes redirectAttributes) {
-        System.out.println("Enter Delete Package Controller ...\n");
         if(!securityService.findUserRole().equals("ADMIN")) {
             redirectAttributes.addFlashAttribute("em", "Unauthorized Access");
             return "redirect:../list";
         }
-
-        Package pack = packageRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Package", "id", id));
-        packageRepository.delete(pack);
-        System.out.println("Package Delete Success...\n");
+        packageService.delete(packageService.findById(id));
         redirectAttributes.addFlashAttribute("em", "Package Deleted");
-        System.out.println("Redirecting to the list with sm....\n\n");
-        return "redirect:../list";
-    }
 
-    @ModelAttribute("types")
-    public List<String> getTypes() {
-        List<String> types = new ArrayList<String>();
-        types.add("NON MASKING");
-        types.add("MASKING");
-        return types;
+        return "redirect:../list";
     }
 
 }

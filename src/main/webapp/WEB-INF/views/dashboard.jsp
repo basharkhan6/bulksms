@@ -6,11 +6,17 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
+<%--<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>--%>
+<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>--%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
-
+<sec:authorize access="hasAuthority('ADMIN')">
+    <c:set var = "role" value = "admin" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('USER')">
+    <c:set var = "role" value = "user" />
+</sec:authorize>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -80,7 +86,7 @@
                         <div class="sidebar">
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
-                                <h4>${lastName}</h4>
+                                <h4><sec:authentication property="name"/></h4>
                                 <a href="profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                                 <a href="profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>

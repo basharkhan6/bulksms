@@ -6,10 +6,16 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
+<%--<%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>--%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<sec:authorize access="hasAuthority('ADMIN')">
+    <c:set var = "role" value = "admin" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('USER')">
+    <c:set var = "role" value = "user" />
+</sec:authorize>
 
 
 <!DOCTYPE html>
@@ -83,7 +89,7 @@
                         <div class="sidebar">
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
-                                <h4>${lastName}</h4>
+                                <h4><sec:authentication property="name"/></h4>
                                 <a href="${contextPath}/profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                                 <a href="${contextPath}/profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
@@ -127,18 +133,20 @@
                                 <div class="col-sm-8">
                                     <div class="table-responsive">
                                         <table class="table">
-                                            <c:if test="${user.locked == 'true'}">
-                                            <tr><th>Locked:</th><th>Locked</th></tr>
-                                            </c:if>
-                                            <c:if test="${user.locked == 'false'}">
-                                                <tr><th>Locked:</th><th>Unlocked</th></tr>
-                                            </c:if>
+                                            <tr><th>Status:</th><th>${user.status}</th></tr>
                                             <tr><th>Email:</th><th>${user.email}</th></tr>
-                                            <tr><td>First Name:</td><td>${user.firstName}</td></tr>
-                                            <tr><td>First Name:</td><td>${user.lastName}</td></tr>
-                                            <tr><td>Address:</td><td>${user.address}</td></tr>
-                                            <tr><td>NID:</td><td>${user.nid}</td></tr>
-                                            <tr><td>Date of Birth:</td><td>${user.dob}</td></tr>
+                                            <tr><td>First Name:</td><td>${user.profile.firstName}</td></tr>
+                                            <tr><td>Last Name:</td><td>${user.profile.lastName}</td></tr>
+                                            <tr><td>Gender:</td><td>${user.profile.gender}</td></tr>
+                                            <tr><td>Date of Birth:</td><td>${user.profile.dob}</td></tr>
+                                            <tr><td>NID:</td><td>${user.profile.nid}</td></tr>
+                                            <tr><td>Company Name:</td><td>${user.profile.companyName}</td></tr>
+                                            <tr><td>Address 1:</td><td>${user.profile.address1}</td></tr>
+                                            <tr><td>Address 2(Optional):</td><td>${user.profile.address2}</td></tr>
+                                            <tr><td>City:</td><td>${user.profile.city}</td></tr>
+                                            <tr><td>State/Region:</td><td>${user.profile.region}</td></tr>
+                                            <tr><td>Zip:</td><td>${user.profile.zip}</td></tr>
+                                            <tr><td>Country:</td><td>${user.profile.country}</td></tr>
                                             <tr>
                                                 <td>Role(s):</td>
                                                 <td>

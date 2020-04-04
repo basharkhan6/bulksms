@@ -11,10 +11,5 @@ $(document).ready(function() {
             $(this).children(".menu").toggle("slow");
             $(this).toggleClass("icn");
     });
-
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd',
-        endDate: '0d',
-        todayHighlight: true
-    });
+    
 });

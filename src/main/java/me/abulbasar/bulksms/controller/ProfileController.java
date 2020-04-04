@@ -5,10 +5,9 @@
  */
 package me.abulbasar.bulksms.controller;
 
-import me.abulbasar.bulksms.exception.ResourceNotFoundException;
 import me.abulbasar.bulksms.model.User;
-import me.abulbasar.bulksms.repository.UserRepository;
 import me.abulbasar.bulksms.service.SecurityService;
+import me.abulbasar.bulksms.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -33,9 +32,9 @@ public class ProfileController {
 
     @Autowired
     private SecurityService securityService;
-
+    
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -44,10 +43,7 @@ public class ProfileController {
     @GetMapping("/view")
     public String viewProfile(Model model) {
         User user = securityService.findLoggedUser();
-        //clear instance password before sending view page
-        user.setPassword("");
         model.addAttribute("user", user);
-        model.addAttribute("role", securityService.findUserRole().toLowerCase());
         
         return "profileView";
     }
@@ -60,12 +56,8 @@ public class ProfileController {
             redirectAttributes.addFlashAttribute("em", "Unauthorize Access");
             return "redirect:../view";
         }
-        User user = userRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Profile", "id", id));
-        //clear instance password before sending view page
-        user.setPassword("");
+        User user = userService.findById(id);
         model.addAttribute("user", user);
-        model.addAttribute("role", securityService.findUserRole().toLowerCase());
         
         return "profileView";
     }
@@ -77,8 +69,7 @@ public class ProfileController {
         //clear instance password before sending view page
         user.setPassword("");
         model.addAttribute("userForm", user);
-        model.addAttribute("role", securityService.findUserRole().toLowerCase());
-        
+
         return "profileUpdate";
     }
     
@@ -90,12 +81,10 @@ public class ProfileController {
             redirectAttributes.addFlashAttribute("em", "Unauthorize Access");
             return "redirect:../view";
         }
-        User user = userRepository.findById(id)
-                .orElseThrow(()->new ResourceNotFoundException("Profile", "id", id));
+        User user = userService.findById(id);
         //clear instance password before sending view page
         user.setPassword("");
         model.addAttribute("userForm", user);
-        model.addAttribute("role", securityService.findUserRole().toLowerCase());
         
         return "profileUpdate";
     }
@@ -113,17 +102,11 @@ public class ProfileController {
         if(bindingResult.hasErrors()) {
             return "profileUpdate";
         }
-        User user = userRepository.findById(userForm.getId())
-                .orElseThrow(()->new ResourceNotFoundException("Profile",
-                        "Id",
-                        userForm.getId()));
-        user.setFirstName(userForm.getFirstName());
-        user.setLastName(userForm.getLastName());
-        user.setAddress(userForm.getAddress());
-        user.setNid(userForm.getNid());
-        user.setDob(userForm.getDob());
-        user.setLocked(userForm.isLocked());
-        userRepository.save(user);
+        
+        userService.updateProfile(userForm);
+        if(securityService.findUserRole().equals("ADMIN")) {
+            userService.updateStatus(userForm, userForm.getStatus());
+        }
         redirectAttributes.addFlashAttribute("sm", "Profile Update Success");
 
         return "redirect:view";
@@ -140,7 +123,6 @@ public class ProfileController {
                 return "redirect:view";
             }
         }
-        User user = userRepository.findByEmail(userEmail);
         if(!password.equals(passwordConfirm)) {
             redirectAttributes.addFlashAttribute("em", "Password Doesn't Match");
             return "redirect:view";
@@ -149,10 +131,8 @@ public class ProfileController {
             redirectAttributes.addFlashAttribute("em", "Please Write a Valid(>6 & <32) Password");
             return "redirect:view";
         }
-        user.setPassword(bCryptPasswordEncoder.encode(password));
-        user.setPasswordConfirm(bCryptPasswordEncoder.encode(passwordConfirm));
-        userRepository.save(user);        
-        redirectAttributes.addFlashAttribute("sm", "Profile Update Success");
+        userService.updatePassword(userEmail, password);
+        redirectAttributes.addFlashAttribute("sm", "Password Change Success");
 
         return "redirect:view";
     }
@@ -162,4 +142,5 @@ public class ProfileController {
         
         return "";
     }
+
 }

@@ -6,10 +6,17 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%--<%@taglib prefix="security" uri="http://www.springframework.org/security/tags"%>--%>
+<%@taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
 
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
+<sec:authorize access="hasAuthority('ADMIN')">
+    <c:set var = "role" value = "admin" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('USER')">
+    <c:set var = "role" value = "user" />
+</sec:authorize>
 
 
 <!DOCTYPE html>
@@ -84,7 +91,7 @@
                         <div class="sidebar">
                             <div class="profile text-center">
                                 <img src="${contextPath}/img/me.jpeg" class="img-circle" alt="Profile Pic" height="150px" width="150px">
-                                <h4>${lastName}</h4>
+                                <h4><sec:authentication property="name"/></h4>
                                 <a href="../../../profile/view" class="btn btn-sm btn-info"><i class="glyphicon glyphicon-eye-open"></i> View</a>
                                 <a href="../../../profile/update" class="btn btn-sm btn-warning"><i class="glyphicon glyphicon-pencil"></i> Update</a>
                                 <hr>
@@ -126,48 +133,60 @@
                                     <form:form action="../update" cssClass="form-horizontal" method="POST" modelAttribute="pack">
                                         <!-- need to associate this data with package id -->
                                         <form:hidden path="id" />
-                                        <div class="form-group">
+                                        <spring:bind path="pName">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
                                             <label for="pName" class="col-md-3 control-label">Name:</label>
                                             <div class="col-md-9">
                                                 <form:input path="pName" type="text" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        </spring:bind>
+                                        <spring:bind path="price">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
                                             <label for="price" class="col-md-3 control-label">Price:</label>
                                             <div class="col-md-9">
                                                 <form:input path="price" type="number" step="0.00000001" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
-                                        <div class="form-group">
+                                        </spring:bind>
+                                        <spring:bind path="sms">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
                                             <label for="sms" class="col-md-3 control-label">Sms:</label>
                                             <div class="col-md-9">
                                                 <form:input path="sms" type="number" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="duration" class="col-md-3 control-label">Duration:</label>
+                                        </spring:bind>
+                                        <spring:bind path="validity">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="validity" class="col-md-3 control-label">Validity:</label>
                                             <div class="col-md-9">
-                                                <form:input path="duration" type="number" cssClass="form-control" required="required" />
+                                                <form:input path="validity" type="number" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="type" class="col-md-3 control-label">Type:</label>
+                                        </spring:bind>
+                                        <spring:bind path="packageType">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="packageType" class="col-md-3 control-label">Type:</label>
                                             <div class="col-md-9">
-                                                <form:select path="type" cssClass="form-control" required="required">
+                                                <form:select path="packageType" cssClass="form-control" required="required">
                                                     <form:option value="" label="--- Select ---" />
-                                                    <form:options items="${types}" />
+                                                    <form:options items="${PackageTypeEnum}" />
                                                 </form:select>
                                             </div>
                                         </div>
-                                       <div class="form-group">
-                                            <label for="activated" class="col-md-3 control-label">Activated:</label>
+                                        </spring:bind>
+                                        <spring:bind path="status">
+                                        <div class="form-group ${status.error ? 'has-error' : ''}">
+                                            <label for="status" class="col-md-3 control-label">Activated:</label>
                                             <div class="col-md-9">
-                                                <form:select path="activated" cssClass="form-control" required="required">
-                                                    <form:option value="true" label="Active" />
-                                                    <form:option value="false" label="Deactive" />
+                                                <form:select path="status" cssClass="form-control" required="required">
+                                                    <form:option value="" label="--- Select ---" />
+                                                    <form:options items="${StatusEnum}" />
                                                 </form:select>
                                             </div>
                                         </div>
+                                        </spring:bind>
 
                                         <div class="form-group">
                                             <div class="col-md-offset-3 col-md-9">

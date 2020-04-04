@@ -5,15 +5,13 @@
  */
 package me.abulbasar.bulksms.repository;
 
-import java.util.List;
+import me.abulbasar.bulksms.model.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
-import me.abulbasar.bulksms.model.Package;
-import me.abulbasar.bulksms.model.StatusEnum;
 
 /**
  *
  * @author Bashar
  */
-public interface PackageRepository extends JpaRepository<Package, Integer> {
-    List<Package> findAllByStatus(StatusEnum status);
+public interface ProfileRepository extends JpaRepository<Profile, Long> {
+    
 }

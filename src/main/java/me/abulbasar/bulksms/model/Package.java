@@ -5,7 +5,10 @@
  */
 package me.abulbasar.bulksms.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,12 +24,15 @@ public class Package {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @NotEmpty
+    @Column(unique=true)
     private String pName;
     private double price;
     private int sms;
-    private String type;
-    private int duration;
-    private boolean activated;
+    @Enumerated(EnumType.STRING)
+    private PackageTypeEnum packageType;
+    private int validity;
+    @Enumerated(EnumType.STRING)
+    private StatusEnum status = StatusEnum.ACTIVE;
 
     public Integer getId() {
         return id;
@@ -60,29 +66,28 @@ public class Package {
         this.sms = sms;
     }
 
-    public String getType() {
-        return type;
+    public PackageTypeEnum getPackageType() {
+        return packageType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setPackageType(PackageTypeEnum packageType) {
+        this.packageType = packageType;
     }
 
-    public int getDuration() {
-        return duration;
+    public int getValidity() {
+        return validity;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setValidity(int validity) {
+        this.validity = validity;
     }
 
-    public boolean isActivated() {
-        return activated;
+    public StatusEnum getStatus() {
+        return status;
     }
 
-    public void setActivated(boolean activated) {
-        this.activated = activated;
+    public void setStatus(StatusEnum status) {
+        this.status = status;
     }
-
 
 }
