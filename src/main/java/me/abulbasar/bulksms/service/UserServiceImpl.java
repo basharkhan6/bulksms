@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    
+        
     @Override
     public User findById(Long id) {
         return userRepository.findById(id)
@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateProfile(User user) {
-        User oldUser = findById(user.getId());
+        User oldUser = findByEmail(user.getEmail());
         Profile oldProfile = oldUser.getProfile();
         Profile profile = user.getProfile();
         
@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public void updateStatus(User user, StatusEnum statusEnum) {
-        User oldUser = findById(user.getId());
+        User oldUser = findByEmail(user.getEmail());
         oldUser.setStatus(statusEnum);
         
         userRepository.save(oldUser);

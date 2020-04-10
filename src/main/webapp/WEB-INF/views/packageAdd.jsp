@@ -145,19 +145,19 @@
                                             </div>
                                         </div>
                                         </spring:bind>
-                                        <spring:bind path="duration">
+                                        <spring:bind path="validity">
                                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                                            <label for="duration" class="col-md-3 control-label">Validity:</label>
+                                            <label for="validity" class="col-md-3 control-label">Validity:</label>
                                             <div class="col-md-9">
                                                 <form:input path="validity" type="number" cssClass="form-control" required="required" />
                                             </div>
                                         </div>
                                         </spring:bind>
-                                        <spring:bind path="packageTye">
+                                        <spring:bind path="packageType">
                                         <div class="form-group ${status.error ? 'has-error' : ''}">
-                                            <label for="packageTye" class="col-md-3 control-label">Type:</label>
+                                            <label for="packageType" class="col-md-3 control-label">Type:</label>
                                             <div class="col-md-9">
-                                                <form:select path="packageTye" cssClass="form-control" required="required">
+                                                <form:select path="packageType" cssClass="form-control" required="required">
                                                     <form:option value="" label="--- Select ---" />
                                                     <form:options items="${PackageTypeEnum}" />
                                                 </form:select>

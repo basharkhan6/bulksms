@@ -140,8 +140,8 @@
                                 <div class="col-sm-8">
                                     <form:form action="${contextPath}/profile/update" cssClass="form-horizontal" method="POST" modelAttribute="userForm">
                                         <!-- need to associate this data with user id -->
-                                        <form:hidden path="id"/>
-                                        <form:errors path="id"></form:errors>
+                                        <form:hidden path="email"/>
+                                        <form:errors path="email"></form:errors>
                                         <c:if test="${role == 'admin'}">
                                             <spring:bind path="status">
                                             <div class="form-group">
